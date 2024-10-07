@@ -10,7 +10,8 @@ def main():
     game_chosen = input("Please Select A Game: ").lower()
     if (game_chosen in games_validation):
         if (game_chosen == "keno"):
-            keno.keno()
+            gameData = keno.keno()
+            print(gameData)
         elif (game_chosen == "numbers"):
             numbers_game.numbers_game()
         elif (game_chosen == "powerball"):
