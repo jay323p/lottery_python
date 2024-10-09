@@ -12,3 +12,17 @@ kenoPayoutMapper = {
         11: {0: 2, 1: 0, 2: 0, 3: 0, 4: 0, 5: 1, 6: 10, 7: 50, 8: 250, 9: 1500, 10: 15000, 11: 500000},
         12: {0: 4, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 5, 7: 25, 8: 150, 9: 1000, 10: 2500, 11: 25000, 12: 1000000},
     }
+
+# coder [0 = "No Win", 1 = "One Digit Match", 2 = "Two Digit Contigous Match", 3 = "First Three Exact", 4 = "First 3 Any",
+#  "     5 = "Last Three Exact", 6 = "Last Three Any", 7 = "All Four Exact", 8 = "All Four Any""]
+numbersPayoutMapper = {
+    0: 0,
+    1: 4,
+    2: 10,
+    3: 500,
+    4: 250,
+    5: 500,
+    6: 250,
+    7: 2000,
+    8: 5000
+}

@@ -4,6 +4,7 @@ import mappers
 def keno():
     # init vars
     print("Welcome to Keno! ---------------------------------------------------------------------")
+    print("")
     spots = getUserSpotChoice() # get user spots
     userNums = getUserInputs(spots) # get user nums
     winNums = generateWinningNums() # generate winning nums
@@ -14,6 +15,7 @@ def keno():
 
 def getUserSpotChoice():
     spots = input("How many spots would you like to play (1-12): ")
+    print("")
     # spots input validation
     if (spots.isdigit()):
         spots = int(spots)
@@ -30,6 +32,7 @@ def getUserInputs(spots):
     nums = {}
     for _ in range(spots):
         usr_num = numInput(nums)
+    print("")
     return nums
 
 def numInput(nums):
