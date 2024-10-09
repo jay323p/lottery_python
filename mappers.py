@@ -45,3 +45,12 @@ powerballPayoutMapper = {
         5: 1000000
     }
 }
+
+massCashPayoutMapper = {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 10,
+    4: 250,
+    5: 100000,
+}
