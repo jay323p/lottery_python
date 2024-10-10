@@ -1,21 +1,16 @@
 import random
 import mappers
+import print_styles
+import rules
 
 def mass_cash():
     # init vars
-    print("Welcome to Mass Cash! ---------------------------------------------------------------------")
-    print("")
+    print_styles.printBoxHeader("Mass Cash", rules.massCashRules)
     spots = 5
     userNums = getUserInputs(spots) # get user nums
     winNums = generateWinningNums() # generate winning nums
     gameData = determinePayout(spots, userNums, winNums)
     # return gameData
-    print("userNums")
-    print(userNums)
-    print("winNums")
-    print(winNums)
-    print("gameData")
-    print(gameData)
 
     # return object with all important data
 
@@ -72,6 +67,8 @@ def determinePayout(spots, numsChosen, winNums):
         "numsChosen": numsChosen,
         "winNums": winNums
     }
+    print_styles.printMassCashWinner(gameData)
+    print_styles.printCloser("MASS CASH")
     return gameData
 
 

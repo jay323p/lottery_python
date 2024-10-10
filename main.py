@@ -12,10 +12,8 @@ def main():
     if (game_chosen in games_validation):
         if (game_chosen == "keno"):
             gameData = keno.keno()
-            print(gameData)
         elif (game_chosen == "numbers"):
             gameData = numbers_game.numbers_game()
-            print(gameData)
         elif (game_chosen == "powerball"):
             powerball.powerball()
         elif (game_chosen == "mass cash"):

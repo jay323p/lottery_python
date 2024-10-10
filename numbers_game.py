@@ -1,10 +1,11 @@
 import mappers
 import random
+import print_styles
+import rules
 
 def numbers_game():
     # init vars
-    print("Welcome to Numbers Game! ---------------------------------------------------------------------")
-    print("")
+    print_styles.printBoxHeader("Numbers Game", rules.numbersRules)
     spots = 4
     userNums = getUserInputs(spots) # get user nums
     userBets = getUserBets() # {0: False, ...}
@@ -21,6 +22,8 @@ def numbers_game():
         "payout": payout,
         "matcher": matcher,
     }
+    print_styles.printNumberGameWinner(gameData)
+    print_styles.printCloser("NUMBER GAME")
     return gameData
 
     # return object with all important data
@@ -79,7 +82,6 @@ def getBets(bets, tmp_bets):
     isDoneBetting = False
     while (isDoneBetting == False):
         print("")
-        print(f"Bets Made: {bets}")
         usr_bet = input("Please Select A Bet Using Numbers 0-8: ")
         if (usr_bet == "d"): # user done betting
             if (len(tmp_bets) == 0): # bets made ? done betting : re-try bet input

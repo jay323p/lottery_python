@@ -1,25 +1,29 @@
 import random
 import mappers
+import print_styles
+import rules
 
 # ensure non-powerball numbers have its own function
 # make sure entering powerball has its own function
 
 def powerball():
     # init vars
-    print("Welcome to Powerball! ---------------------------------------------------------------------")
-    print("")
+    print_styles.printBoxHeader("Powerball", rules.powerballRules)
     userNums = []
     non_pb_checker = {}
     getUserInputs(userNums, non_pb_checker) # get user nums
     winNums = generateWinningNums() # generate winning nums
-    drawData = determinePayout(userNums, non_pb_checker, winNums)
-    print("userNums")
-    print(userNums)
-    print("winNums")
-    print(winNums)
-    print("drawData")
-    print(drawData)
-    # return gameData
+    gameData = determinePayout(userNums, non_pb_checker, winNums)
+    print_styles.printPowerballWinner(gameData)
+    print_styles.printCloser("POWERBALL")
+    # print("userNums")
+    # print(userNums)
+    # print("winNums")
+    # print(winNums)
+    # print("drawData")
+    # print(drawData)
+
+    return gameData
 
     # return object with all important data
 
@@ -105,12 +109,14 @@ def determinePayout(numsChosen, non_pb_checker, winNums):
     else:
         payout = pb_payout_mapper.get("False").get(non_pb_matches)
     
-    drawData = {
+    gameData = {
+        "userNums": numsChosen,
+        "winNums": winNums,
         "match_pb_num": match_pb_num,
         "non_pb_matches": non_pb_matches,
         "payout": payout
     }
-    return drawData
+    return gameData
 
 
 def errorPrinter(message, status):
