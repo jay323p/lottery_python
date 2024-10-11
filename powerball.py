@@ -2,30 +2,45 @@ import random
 import mappers
 import print_styles
 import rules
-
-# ensure non-powerball numbers have its own function
-# make sure entering powerball has its own function
+import simulations
 
 def powerball():
     # init vars
     print_styles.printBoxHeader("Powerball", rules.powerballRules)
-    userNums = []
-    non_pb_checker = {}
-    getUserInputs(userNums, non_pb_checker) # get user nums
-    winNums = generateWinningNums() # generate winning nums
-    gameData = determinePayout(userNums, non_pb_checker, winNums)
-    print_styles.printPowerballWinner(gameData)
-    print_styles.printCloser("POWERBALL")
-    # print("userNums")
-    # print(userNums)
-    # print("winNums")
-    # print(winNums)
-    # print("drawData")
-    # print(drawData)
+    shouldSimulate = simulations.simulateGames(errorPrinter)
+    if (shouldSimulate):
+        sims = simulations.getSimulationCount(errorPrinter)
+        total_payout = 0
+        game_data_collection = []
+        userNums = []
+        non_pb_checker = {}
+        getUserInputs(userNums, non_pb_checker) # get user nums
+        for i in range(sims):
+            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+            winNums = generateWinningNums() # generate winning nums
+            gameData = determinePayout(userNums, non_pb_checker, winNums)
+            payout = gameData.get("payout")
+            if (payout > 0):
+                total_payout += payout
+                game_data_collection.append(gameData)
+                print_styles.printPowerballWinner(gameData)
+            else:
+                print(f"USER NUMS: {userNums}")
+                print(f"WINNING NUMS: {winNums}")
+                print(f"PAYOUT: ${payout}")
+            print(f"**********************************************************************************************************************************************************")
+        printSimulationReport(sims, total_payout)
+        return game_data_collection
+    else:
+        userNums = []
+        non_pb_checker = {}
+        getUserInputs(userNums, non_pb_checker) # get user nums
+        winNums = generateWinningNums() # generate winning nums
+        gameData = determinePayout(userNums, non_pb_checker, winNums)
+        print_styles.printPowerballWinner(gameData)
+        print_styles.printCloser("POWERBALL")
+        return gameData
 
-    return gameData
-
-    # return object with all important data
 
 def getUserInputs(userNums, non_pb_checker):
     # get non-powerball nums
@@ -127,3 +142,26 @@ def errorPrinter(message, status):
     print("*" * len(message) * 2)
     print("")
     print("")
+
+def printSimulationReport(simulations, total_payout):
+        cost = simulations * 2
+        avg_return = (total_payout / cost) * 100
+        avg_loss = 100 - avg_return
+        print("")
+        print("")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("")
+        print("")
+        print(f"-----------------------------------------------------  TOTAL COST: ${cost} --------------------------------------------------------------------")
+        print(f"-------------------------------------------  TOTAL PAYOUT: ${total_payout} winnings in {simulations} simulations   --------------------------------------------------")
+        print(f"-------------------------------------------  AVERAGE RETURN PERCENT PER SIMULATION: {avg_return}% per game  ---------------------------------------------------------")
+        print(f"-------------------------------------------  AVERAGE LOSS PERCENT PER SIMULATION: {avg_loss}% per game  ---------------------------------------------------------")
+        if (avg_loss < 0):
+            print(f"-------------------------------------------  CONGRATS, YOU ACTUALLY MADE MORE MONEY THAN YOU BET THIS TIME  ---------------------------------------------------------")
+        else:
+            print(f"------------------------------------------- YEAH, GAMBLING IS TOUGH INNIT. ITS ALL ABOUT LUCK.  ---------------------------------------------------------")
+        print("")
+        print("")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")

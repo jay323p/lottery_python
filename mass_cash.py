@@ -2,18 +2,46 @@ import random
 import mappers
 import print_styles
 import rules
+import simulations
 
 def mass_cash():
     # init vars
     print_styles.printBoxHeader("Mass Cash", rules.massCashRules)
-    spots = 5
-    userNums = getUserInputs(spots) # get user nums
-    winNums = generateWinningNums() # generate winning nums
-    gameData = determinePayout(spots, userNums, winNums)
-    # return gameData
-
-    # return object with all important data
-
+    shouldSimulate = simulations.simulateGames(errorPrinter)
+    if (shouldSimulate):
+        sims = simulations.getSimulationCount(errorPrinter)
+        spots = 5
+        userNums = getUserInputs(spots) # get user nums
+        total_matches = 0
+        total_payout = 0
+        for i in range(sims):
+            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+            winNums = generateWinningNums() # generate winning nums
+            gameData = determinePayout(spots, userNums, winNums)
+            game_data_collection = []
+            payout = gameData.get("payout")
+            matches = gameData.get("matches")
+            if (payout > 0):
+                total_payout += payout
+                total_matches += matches
+                
+                game_data_collection.append(gameData)
+                print_styles.printMassCashWinner(gameData)
+            else:
+                print(f"USER NUMS: {userNums}")
+                print(f"WINNING NUMS: {winNums}")
+                print(f"PAYOUT: ${payout}")
+                print(f"MATCHES: {matches} matches")
+            print(f"**********************************************************************************************************************************************************")
+        printSimulationReport(sims, total_matches, total_payout)
+        return game_data_collection
+    else:
+        spots = 5
+        userNums = getUserInputs(spots) # get user nums
+        winNums = generateWinningNums() # generate winning nums
+        gameData = determinePayout(spots, userNums, winNums)
+        return gameData
+    
 
 def getUserInputs(spots):
     nums = {}
@@ -67,7 +95,6 @@ def determinePayout(spots, numsChosen, winNums):
         "numsChosen": numsChosen,
         "winNums": winNums
     }
-    print_styles.printMassCashWinner(gameData)
     print_styles.printCloser("MASS CASH")
     return gameData
 
@@ -80,3 +107,27 @@ def errorPrinter(message, status):
     print("*" * len(message) * 2)
     print("")
     print("")
+
+def printSimulationReport(simulations, total_matches, total_payout):
+        avg_matches = total_matches / simulations
+        avg_return = (total_payout / simulations) * 100
+        avg_loss = 100 - avg_return
+        print("")
+        print("")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("")
+        print("")
+        print(f"-------------------------------------------  TOTAL MATCHES: {total_matches} matches in {simulations} simulations   -------------------------------------------------")
+        print(f"-------------------------------------------  AVERAGE MATCHES PER SIMULATION: {avg_matches} matches   ---------------------------------------------------------------")
+        print(f"-------------------------------------------  TOTAL PAYOUT: ${total_payout} winnings in {simulations} simulations   --------------------------------------------------")
+        print(f"-------------------------------------------  AVERAGE RETURN PERCENT PER SIMULATION: {avg_return}% per game  ---------------------------------------------------------")
+        print(f"-------------------------------------------  AVERAGE LOSS PERCENT PER SIMULATION: {avg_loss}% per game  ---------------------------------------------------------")
+        if (avg_loss < 0):
+            print(f"-------------------------------------------  CONGRATS, YOU ACTUALLY MADE MORE MONEY THAN YOU BET THIS TIME  ---------------------------------------------------------")
+        else:
+            print(f"------------------------------------------- YEAH, GAMBLING IS TOUGH INNIT. ITS ALL ABOUT LUCK.  ---------------------------------------------------------")
+        print("")
+        print("")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
