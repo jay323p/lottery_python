@@ -2,32 +2,82 @@ import mappers
 import random
 import print_styles
 import rules
+import simulations
 
 def numbers_game():
     # init vars
     print_styles.printBoxHeader("Numbers Game", rules.numbersRules)
-    spots = 4
-    userNums = getUserInputs(spots) # get user nums
-    userBets = getUserBets() # {0: False, ...}
-    # winNums = generateWinningNums() # generate winning nums
-    winNums = [1,1,0,0] # generate winning nums
-    payout_matcher = {}
-    payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
-    payout = payout_matcher.get("payout")
-    matcher = payout_matcher.get("matcher")
-    gameData = {
-        "userBets": userBets,
-        "userNums": userNums,
-        "winNums": winNums,
-        "payout": payout,
-        "matcher": matcher,
-    }
-    print_styles.printNumberGameWinner(gameData)
-    print_styles.printCloser("NUMBER GAME")
-    return gameData
+    shouldSimulate = simulations.simulateGames(errorPrinter)
+    if (shouldSimulate):
+        sims = simulations.getSimulationCount(errorPrinter)
+        spots = 4
+        userNums = getUserInputs(spots) # get user nums
+        userBets = getUserBets() # {0: False, ...}
+        total_payout = 0
+        game_data_collection = []
+        for i in range(sims):
+            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+            # winNums = [1, 2, 3, 4] # generate winning nums
+            winNums = generateWinningNums() # generate winning nums
+            payout_matcher = {}
+            payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
+            payout = payout_matcher.get("payout")
+            if (payout > 0):
+                total_payout += payout
+                matcher = payout_matcher.get("matcher")
+                gameData = {
+                    "userBets": userBets,
+                    "userNums": userNums,
+                    "winNums": winNums,
+                    "payout": payout,
+                    "matcher": matcher,
+                }
+                game_data_collection.append(gameData)
+                print_styles.printNumberGameWinner(gameData)
+            else:
+                print(f"USER NUMS: {userNums}")
+                print(f"WINNING NUMS: {winNums}")
+                print(f"PAYOUT: ${payout}")
+            print(f"**********************************************************************************************************************************************************")
+        printSimulationReport(sims, total_payout, userBets)
+        print_styles.printCloser("NUMBERS GAME")
+        return game_data_collection
+    else:
+        spots = 4
+        userNums = getUserInputs(spots) # get user nums
+        userBets = getUserBets() # {0: False, ...}
+        winNums = generateWinningNums() # generate winning nums
+        payout_matcher = {}
+        payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
+        payout = payout_matcher.get("payout")
+        matcher = payout_matcher.get("matcher")
+        gameData = {
+            "userBets": userBets,
+            "userNums": userNums,
+            "winNums": winNums,
+            "payout": payout,
+            "matcher": matcher,
+        }
+        print_styles.printNumberGameWinner(gameData)
+        print_styles.printCloser("NUMBER GAME")
+        return gameData
 
     # return object with all important data
 
+def simulateGames():
+    q = input("Would you like to simulate your games played (y/n): ")
+    if (q.isalpha()):
+        q = q.lower()
+        if (q == "y" or q == "yes"):
+            return True
+        elif (q == "n" or q == "no"):
+            return False
+        else:
+            errorPrinter("Invalid response provided. Please enter \"y\" or \"n\" only.", 400)
+            return simulateGames()
+    else:
+        errorPrinter("Please enter alphabetical characters only", 400)
+        return simulateGames()
 
 def getUserInputs(spots):
     nums = []
@@ -141,6 +191,9 @@ def determinePayout(spots, userBets, numsChosen, winNums):
     # in numbers game, you only win highest winning bet
     # ex: if you win all-four-exact bet, you dont win 1 digit exact, 2 digit exact, etc.. even if such bets were placed
     # hence we start with the highest winning conditional and return accordingly if bet placed and won
+    print('userBets ----------')
+    print(userBets)
+    print('userBets ----------')
     if (userBets[7] == True):
         matchFourExact = didMatchFourExact(numsChosen, winNums)
         if (matchFourExact):
@@ -213,10 +266,11 @@ def determinePayout(spots, userBets, numsChosen, winNums):
                 "payout": payout,
                 "matcher": matcher,
             }
+    
     return {
         "payout": 0,
         "matcher": 0,
-    }
+        }
 
 
 
@@ -254,10 +308,19 @@ def didMatchFirstThreeExact(numsChosen, winNums):
 
 # FIRST THREE ANY
 def didMatchFirstThreeAny(numsChosen, winNums):
-    match_first_any = ((numsChosen[0] == winNums[0] or numsChosen[0] == winNums[1] or numsChosen[0] == winNums[2]))
-    match_second_any = ((numsChosen[1] == winNums[0] or numsChosen[1] == winNums[1] or numsChosen[1] == winNums[2]))
-    match_third_any = ((numsChosen[2] == winNums[0] or numsChosen[2] == winNums[1] or numsChosen[2] == winNums[2]))
-    return match_first_any and match_second_any and match_third_any
+    usr_freq = {}
+    win_freq = {}
+    for i in range(3):
+        if (numsChosen[i] in usr_freq):
+            usr_freq[numsChosen[i]] += 1
+        else:
+            usr_freq[numsChosen[i]] = 1
+    for i in range(3):
+        if (winNums[i] in win_freq):
+            win_freq[winNums[i]] += 1
+        else:
+            win_freq[winNums[i]] = 1
+    return usr_freq == win_freq
 
 # LAST THREE EXACT
 def didMatchLastThreeExact(numsChosen, winNums):
@@ -269,10 +332,21 @@ def didMatchLastThreeExact(numsChosen, winNums):
 
 # LAST THREE ANY
 def didMatchLastThreeAny(numsChosen, winNums):
-    match_last_any = ((numsChosen[3] == winNums[3] or numsChosen[3] == winNums[2] or numsChosen[3] == winNums[1]))
-    match_second_last_any = ((numsChosen[2] == winNums[3] or numsChosen[2] == winNums[2] or numsChosen[2] == winNums[1]))
-    match_third_last_any = ((numsChosen[1] == winNums[3] or numsChosen[1] == winNums[2] or numsChosen[1] == winNums[1]))
-    return match_last_any and match_second_last_any and match_third_last_any
+    usr_freq = {}
+    win_freq = {}
+    for i in range(1, 4):
+        if (numsChosen[i] in usr_freq):
+            usr_freq[numsChosen[i]] += 1
+        else:
+            usr_freq[numsChosen[i]] = 1
+
+    for i in range(1, 4):
+        if (winNums[i] in win_freq):
+            win_freq[winNums[i]] += 1
+        else:
+            win_freq[winNums[i]] = 1
+    return usr_freq == win_freq
+
 
 # ALL FOUR EXACT
 def didMatchFourExact(numsChosen, winNums):
@@ -285,8 +359,45 @@ def didMatchFourExact(numsChosen, winNums):
 
 # ALL FOUR ANY
 def didMatchFourAny(numsChosen, winNums):
-    match_first_any = ((numsChosen[0] == winNums[0] or numsChosen[0] == winNums[1] or numsChosen[0] == winNums[2] or numsChosen[0] == winNums[3]))
-    match_second_any = ((numsChosen[1] == winNums[0] or numsChosen[1] == winNums[1] or numsChosen[1] == winNums[2] or numsChosen[1] == winNums[3]))
-    match_third_any = ((numsChosen[2] == winNums[0] or numsChosen[2] == winNums[1] or numsChosen[2] == winNums[2] or numsChosen[2] == winNums[3]))
-    match_last_any = ((numsChosen[3] == winNums[0] or numsChosen[3] == winNums[1] or numsChosen[3] == winNums[2] or numsChosen[3] == winNums[3]))
-    return match_first_any and match_second_any and match_third_any and match_last_any
+    usr_freq = {}
+    win_freq = {}
+    for n in numsChosen:
+        if n in usr_freq:
+            usr_freq[n] += 1
+        else:
+            usr_freq[n] = 1
+    for n in winNums:
+        if n in usr_freq:
+            usr_freq[n] += 1
+        else:
+            usr_freq[n] = 1
+    
+    return usr_freq == win_freq
+
+def printSimulationReport(sims: int, total_payout: int, userBets: dict):
+    cost = 0
+    for ky, va in userBets.items():
+        if (va == True):
+            cost += 0.5
+    cost *= sims
+
+    avg_return = (total_payout / cost) * 100
+    avg_loss = 100 - avg_return
+    print("")
+    print("")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("")
+    print("")
+    print(f"-------------------------------------------  TOTAL PAYOUT: ${total_payout} winnings ---------------------------------------------------------------------------")
+    print(f"-------------------------------------------  TOTAL COST: ${cost} in bets made ---------------------------------------------------------------------------")
+    print(f"-------------------------------------------  AVERAGE RETURN PERCENT PER SIMULATION: {avg_return}% per game  ---------------------------------------------------------")
+    print(f"-------------------------------------------  AVERAGE LOSS PERCENT PER SIMULATION: {avg_loss}% per game  ---------------------------------------------------------")
+    if (avg_loss < 0):
+        print(f"-------------------------------------------  CONGRATS, YOU ACTUALLY MADE MORE MONEY THAN YOU BET THIS TIME  ---------------------------------------------------------")
+    else:
+        print(f"------------------------------------------- YEAH, GAMBLING IS TOUGH INNIT. ITS ALL ABOUT LUCK.  ---------------------------------------------------------")
+    print("")
+    print("")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       RESULTS OF SIMULATION      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")

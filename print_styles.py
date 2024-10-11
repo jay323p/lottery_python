@@ -66,14 +66,15 @@ def printKenoWinner(gameData: dict):
 # number game specific ------------------------------------------------------------------------------------------------------------------------------
 def printNumberGameWinner(gameData: dict):
     betMapper = {
-        0: "1 Digit",
-        1: "2 Digit",
-        2: "First 3 Exact",
-        3: "First 3 Any",
-        4: "Last 3 Exact",
-        5: "Last 3 Any",
-        6: "4 Any",
-        7: "4 Exact",
+        0: "No Winner",
+        1: "1 Digit",
+        2: "2 Digit",
+        3: "First 3 Exact",
+        4: "First 3 Any",
+        5: "Last 3 Exact",
+        6: "Last 3 Any",
+        7: "4 Any",
+        8: "4 Exact",
     }
     print("  ________________________________________________________________________")
     print(f"||                                                                       ||")
