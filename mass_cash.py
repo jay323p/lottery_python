@@ -14,24 +14,17 @@ def mass_cash():
         userNums = getUserInputs(spots) # get user nums
         total_matches = 0
         total_payout = 0
+        game_data_collection = []
         for i in range(sims):
             print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
             winNums = generateWinningNums() # generate winning nums
             gameData = determinePayout(spots, userNums, winNums)
-            game_data_collection = []
             payout = gameData.get("payout")
             matches = gameData.get("matches")
-            if (payout > 0):
-                total_payout += payout
-                total_matches += matches
-                
-                game_data_collection.append(gameData)
-                print_styles.printMassCashWinner(gameData)
-            else:
-                print(f"USER NUMS: {userNums}")
-                print(f"WINNING NUMS: {winNums}")
-                print(f"PAYOUT: ${payout}")
-                print(f"MATCHES: {matches} matches")
+            total_payout += payout
+            total_matches += matches
+            game_data_collection.append(gameData)
+            print_styles.printMassCashWinner(gameData)
             print(f"**********************************************************************************************************************************************************")
         printSimulationReport(sims, total_matches, total_payout)
         return game_data_collection

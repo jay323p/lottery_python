@@ -22,22 +22,17 @@ def numbers_game():
             payout_matcher = {}
             payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
             payout = payout_matcher.get("payout")
-            if (payout > 0):
-                total_payout += payout
-                matcher = payout_matcher.get("matcher")
-                gameData = {
-                    "userBets": userBets,
-                    "userNums": userNums,
-                    "winNums": winNums,
-                    "payout": payout,
-                    "matcher": matcher,
-                }
-                game_data_collection.append(gameData)
-                print_styles.printNumberGameWinner(gameData)
-            else:
-                print(f"USER NUMS: {userNums}")
-                print(f"WINNING NUMS: {winNums}")
-                print(f"PAYOUT: ${payout}")
+            total_payout += payout
+            matcher = payout_matcher.get("matcher")
+            gameData = {
+                "userBets": userBets,
+                "userNums": userNums,
+                "winNums": winNums,
+                "payout": payout,
+                "matcher": matcher,
+            }
+            game_data_collection.append(gameData)
+            print_styles.printNumberGameWinner(gameData)
             print(f"**********************************************************************************************************************************************************")
         printSimulationReport(sims, total_payout, userBets)
         print_styles.printCloser("NUMBERS GAME")

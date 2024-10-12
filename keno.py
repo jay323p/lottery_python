@@ -2,6 +2,7 @@ import random
 import mappers
 import rules
 import print_styles
+import csv
 
 def keno(): # -> dict : {spots, matches, payout, numsChosen, winNums}
     print_styles.printBoxHeader("Welcome to Keno!", rules.kenoRules) # header

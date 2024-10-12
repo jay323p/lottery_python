@@ -20,14 +20,9 @@ def powerball():
             winNums = generateWinningNums() # generate winning nums
             gameData = determinePayout(userNums, non_pb_checker, winNums)
             payout = gameData.get("payout")
-            if (payout > 0):
-                total_payout += payout
-                game_data_collection.append(gameData)
-                print_styles.printPowerballWinner(gameData)
-            else:
-                print(f"USER NUMS: {userNums}")
-                print(f"WINNING NUMS: {winNums}")
-                print(f"PAYOUT: ${payout}")
+            total_payout += payout
+            game_data_collection.append(gameData)
+            print_styles.printPowerballWinner(gameData)
             print(f"**********************************************************************************************************************************************************")
         printSimulationReport(sims, total_payout)
         return game_data_collection
