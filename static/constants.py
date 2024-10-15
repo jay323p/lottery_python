@@ -15,3 +15,9 @@ MASS_CASH_FOLDER_PATH = "data/mass_cash"
 # VALIDATORS
 GAMES_VALIDATORS = {"keno", "numbers", "powerball", "mass cash"}
 PLOTS_VALIDATORS = {"line", "scatter"}
+
+# FIELDNAMES
+KENO_FIELDNAMES = ["spots", "matches", "payout", "userNums", "winNums"]
+NUMBERS_GAME_FIELDNAMES = ["userBets", "userNums", "winNums", "matches", "payout"]
+POWERBALL_FIELDNAMES = ["userNums", "winNums", "matchPb", "non_pb_matches", "payout"]
+MASS_CASH_FIELDNAMES = ["spots", "matches", "payout", "userNums", "winNums"]

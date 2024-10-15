@@ -1,8 +1,8 @@
 import random
-import mappers
-import print_styles
-import rules
-import simulations
+from utils import mappers 
+from static import print_styles
+from static import rules
+from utils import simulations 
 
 def mass_cash():
     # init vars

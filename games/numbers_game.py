@@ -1,8 +1,8 @@
-import mappers
+from utils import mappers
 import random
-import print_styles
-import rules
-import simulations
+from static import print_styles
+from static import rules
+from utils import simulations
 
 def numbers_game():
     # init vars

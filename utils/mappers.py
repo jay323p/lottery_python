@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 
+# dynamic mappers
 def mapLinePlot(x, y, chart_title, x_label, y_label):
     plt.plot(x, y)
     plt.title(chart_title)
@@ -7,9 +8,8 @@ def mapLinePlot(x, y, chart_title, x_label, y_label):
     plt.ylabel(y_label)
     plt.show()
 
-
-
-
+# static mappers
+# {1: {...}}: 1 = spots played & ... = {matches: payout}
 kenoPayoutMapper = {
         1: {0: 0, 1: 2.5},
         2: {0: 0, 1: 1, 2: 5},
@@ -39,6 +39,7 @@ numbersPayoutMapper = {
     8: 5000
 }
 
+# true = matched pb & false = no match pb
 powerballPayoutMapper = {
     "True": {
         0: 4,
@@ -58,6 +59,7 @@ powerballPayoutMapper = {
     }
 }
 
+# matches: payout
 massCashPayoutMapper = {
     0: 0,
     1: 0,

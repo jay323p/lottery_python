@@ -1,4 +1,4 @@
-import constants
+from static import constants
 from matplotlib import pyplot as plt
 
 def getPlotChoice():
@@ -9,11 +9,16 @@ def getPlotChoice():
         print("ERROR: Invalid plot choice. Please choose from list given above | STATUS: 500")
         return getPlotChoice()
 
-def generate_plot_data(plot: str, game: str, data):
+def generate_plot_data(plot: str, game: str, data: list[dict]):
     fx = None
+    x = []
+    y = []
     if (plot.lower() == "line"):
         fx = plt.plot
     elif (plot.lower() == "scatter"):
         fx = plt.scatter
-    fx([1,2,3,4,5], [9,8,7,6,5])
+    for i in range(len(data)):
+        x.append(i)
+        y.append(data[i].get("payout"))
+    fx(x, y)
     plt.show()

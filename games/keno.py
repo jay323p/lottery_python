@@ -1,7 +1,7 @@
 import random
-import mappers
-import rules
-import print_styles
+from utils import mappers
+from static import rules
+from static import print_styles
 
 def keno(): # -> dict : {spots, matches, payout, numsChosen, winNums}
     print_styles.printBoxHeader("Welcome to Keno!", rules.kenoRules) # header

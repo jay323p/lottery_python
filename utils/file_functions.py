@@ -1,4 +1,5 @@
 import csv
+from static import constants
 import os
 import random
 
@@ -36,12 +37,22 @@ def save_file(gameData, f_name_single_game, f_name_simulation, folder_path):
         return
 
 # .csv file_ending validation must be done prior to this function call
-def read_csv_file(fp):
+def read_csv_file(fp, game_folder):
+    fieldNames = None
     try:
+        if (game_folder == "keno"):
+            fieldNames = constants.KENO_FIELDNAMES
+        elif (game_folder == "numbers_game"):
+            fieldNames = constants.NUMBERS_GAME_FIELDNAMES
+        elif (game_folder == "powerball"):
+            fieldNames = constants.POWERBALL_FIELDNAMES
+        elif (game_folder == "mass_cash"):
+            fieldNames = constants.MASS_CASH_FIELDNAMES
         with open(fp, 'r') as f:
-            csv_reader = csv.DictReader(f)
+            csv_reader = csv.DictReader(f, fieldnames=fieldNames)
             data = [row for row in csv_reader]
-            return data
+            p_data = [row for row in data]
+            return p_data
     except Exception as e:
         print(e)
 
