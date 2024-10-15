@@ -2,40 +2,51 @@ import random
 import mappers
 import rules
 import print_styles
-import csv
 
 def keno(): # -> dict : {spots, matches, payout, numsChosen, winNums}
     print_styles.printBoxHeader("Welcome to Keno!", rules.kenoRules) # header
     shouldSimulate = simulateGames()
     if (shouldSimulate):
-        simulations = getSimulationCount()
-        spots = getUserSpotChoice() # get user spots
-        userNums = getUserInputs(spots) # get user nums
-        total_payout = 0
-        total_matches = 0
-        game_data_collection = []
-        for i in range(simulations):
-            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
-            winNums = generateWinningNums() # generate winning nums
-            gameData = determinePayout(spots, userNums, winNums) # {spots, matches, payout, numsChosen, winNums}
-            total_payout += gameData.get("payout")
-            total_matches += gameData.get("matches")
-            game_data_collection.append(gameData)
-            print_styles.printKenoWinner(gameData)
-            print(f"**********************************************************************************************************************************************************")
-
-        printSimulationReport(simulations, total_matches, total_payout)
-        print_styles.printCloser("KENO")
+        game_data_collection = simulateKeno()
         return game_data_collection
     else:
-        spots = getUserSpotChoice() # get user spots
-        userNums = getUserInputs(spots) # get user nums
+        gameData = playSingleKeno()
+        return gameData
+
+def simulateKeno():
+    spots = getUserSpotChoice() # get user spots
+    simulations = getSimulationCount()
+    userNums = getUserInputs(spots)
+    total_payout = 0
+    total_matches = 0
+    game_data_collection = []
+    x = []
+    y = []
+    for i in range(simulations):
+        print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
         winNums = generateWinningNums() # generate winning nums
         gameData = determinePayout(spots, userNums, winNums) # {spots, matches, payout, numsChosen, winNums}
-        # print/return data
+        payout = gameData.get("payout")
+        total_payout += payout
+        total_matches += gameData.get("matches")
+        x.append(i)
+        y.append(payout)
+        game_data_collection.append(gameData)
         print_styles.printKenoWinner(gameData)
-        print_styles.printCloser("KENO")
-        return gameData
+        print(f"**********************************************************************************************************************************************************")
+    mappers.mapLinePlot(x, y, f"Keno {simulations} Simulations", "Game Number #", "Payout $")
+    printSimulationReport(simulations, total_matches, total_payout)
+    print_styles.printCloser("KENO")
+    return game_data_collection
+
+def playSingleKeno():
+    spots = getUserSpotChoice() # get user spots
+    userNums = getUserInputs(spots) # get user nums
+    winNums = generateWinningNums() # generate winning nums
+    gameData = determinePayout(spots, userNums, winNums) # {spots, matches, payout, numsChosen, winNums}
+    print_styles.printKenoWinner(gameData)
+    print_styles.printCloser("KENO")
+    return gameData
 
 def simulateGames():
     q = input("Would you like to simulate your games played (y/n): ")
@@ -54,8 +65,8 @@ def simulateGames():
 
 
 def getSimulationCount():
-    sc = input("Please enter numeric value, under 100, for how many simulations desired: ")
-    limit = 1000
+    sc = input("Please enter numeric value, under 100000, for how many simulations desired: ")
+    limit = 100000
     if (sc.isdigit()):
         sc = int(sc)
         if (1 <= sc <= limit):
@@ -66,7 +77,7 @@ def getSimulationCount():
     else:
         errorPrinter("Please enter a numeric value under 100", 400)
         return getSimulationCount()
-
+5
 
 def getUserSpotChoice(): # -> int : range[1-12]
     spots = input("How many spots would you like to play (1-12): ")

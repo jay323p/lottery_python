@@ -179,3 +179,11 @@ def printMassCashWinner(gameData: dict):
             print(" " * spacer + f"{"".join(num_list)}" + " " * spacer)
             print(f"                                                                        ")
 
+def print_file_extraction_success(msg):
+    print("")
+    print("")
+    print(msg)
+    print("")
+    print("")
+    print("Acceptable Plots: Line, Scatter")
+    print("")

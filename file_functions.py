@@ -35,4 +35,14 @@ def save_file(gameData, f_name_single_game, f_name_simulation, folder_path):
             writer.writerows(gameData)
         return
 
+# .csv file_ending validation must be done prior to this function call
+def read_csv_file(fp):
+    try:
+        with open(fp, 'r') as f:
+            csv_reader = csv.DictReader(f)
+            data = [row for row in csv_reader]
+            return data
+    except Exception as e:
+        print(e)
+
 # 1* Create random file name to store each simulation session separately for easier data processing and graphing

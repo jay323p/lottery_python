@@ -1,3 +1,15 @@
+from matplotlib import pyplot as plt
+
+def mapLinePlot(x, y, chart_title, x_label, y_label):
+    plt.plot(x, y)
+    plt.title(chart_title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.show()
+
+
+
+
 kenoPayoutMapper = {
         1: {0: 0, 1: 2.5},
         2: {0: 0, 1: 1, 2: 5},

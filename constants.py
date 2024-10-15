@@ -14,3 +14,4 @@ MASS_CASH_FOLDER_PATH = "data/mass_cash"
 
 # VALIDATORS
 GAMES_VALIDATORS = {"keno", "numbers", "powerball", "mass cash"}
+PLOTS_VALIDATORS = {"line", "scatter"}

@@ -1,4 +1,0 @@
-spots,matches,payout,numsChosen,winNums
-1,1,2.5,{1: True},"{22: True, 18: True, 59: True, 14: True, 39: True, 43: True, 42: True, 10: True, 16: True, 65: True, 61: True, 58: True, 27: True, 57: True, 5: True, 1: True, 35: True, 62: True, 45: True, 41: True}"
-2,1,1,"{1: True, 2: True}","{35: True, 57: True, 22: True, 14: True, 47: True, 70: True, 56: True, 78: True, 29: True, 54: True, 32: True, 30: True, 39: True, 43: True, 23: True, 4: True, 3: True, 11: True, 44: True, 2: True}"
-5,1,0,"{1: True, 2: True, 3: True, 4: True, 12: True}","{61: True, 62: True, 77: True, 78: True, 52: True, 63: True, 19: True, 30: True, 38: True, 11: True, 67: True, 29: True, 9: True, 27: True, 37: True, 58: True, 53: True, 22: True, 12: True, 59: True}"

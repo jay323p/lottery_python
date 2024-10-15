@@ -14,15 +14,15 @@ def simulateGames(errorPrinter):
         return simulateGames()
     
 def getSimulationCount(errorPrinter):
-    sc = input("Please enter numeric value, under 1000, for how many simulations desired: ")
-    limit = 1000
+    sc = input("Please enter numeric value, under 100000, for how many simulations desired: ")
+    limit = 100000
     if (sc.isdigit()):
         sc = int(sc)
         if (1 <= sc <= limit):
             return sc
         else:
-            errorPrinter("Please enter a numeric value under 1000", 400)
+            errorPrinter("Please enter a numeric value under 100000", 400)
             return getSimulationCount()
     else:
-        errorPrinter("Please enter a numeric value under 1000", 400)
+        errorPrinter("Please enter a numeric value under 100000", 400)
         return getSimulationCount()

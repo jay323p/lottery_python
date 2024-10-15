@@ -9,33 +9,46 @@ def powerball():
     print_styles.printBoxHeader("Powerball", rules.powerballRules)
     shouldSimulate = simulations.simulateGames(errorPrinter)
     if (shouldSimulate):
-        sims = simulations.getSimulationCount(errorPrinter)
-        total_payout = 0
-        game_data_collection = []
-        userNums = []
-        non_pb_checker = {}
-        getUserInputs(userNums, non_pb_checker) # get user nums
-        for i in range(sims):
-            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
-            winNums = generateWinningNums() # generate winning nums
-            gameData = determinePayout(userNums, non_pb_checker, winNums)
-            payout = gameData.get("payout")
-            total_payout += payout
-            game_data_collection.append(gameData)
-            print_styles.printPowerballWinner(gameData)
-            print(f"**********************************************************************************************************************************************************")
-        printSimulationReport(sims, total_payout)
+        game_data_collection = simulatePowerball()
         return game_data_collection
     else:
-        userNums = []
-        non_pb_checker = {}
-        getUserInputs(userNums, non_pb_checker) # get user nums
-        winNums = generateWinningNums() # generate winning nums
-        gameData = determinePayout(userNums, non_pb_checker, winNums)
-        print_styles.printPowerballWinner(gameData)
-        print_styles.printCloser("POWERBALL")
+        gameData = playSinglePowerball()
         return gameData
 
+def simulatePowerball():
+    sims = simulations.getSimulationCount(errorPrinter)
+    total_payout = 0
+    game_data_collection = []
+    userNums = []
+    non_pb_checker = {}
+    getUserInputs(userNums, non_pb_checker) # get user nums
+    x = []
+    y = []
+    for i in range(sims):
+        print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+        winNums = generateWinningNums() # generate winning nums
+        gameData = determinePayout(userNums, non_pb_checker, winNums)
+        payout = gameData.get("payout")
+        total_payout += payout
+        x.append(i)
+        y.append(payout)
+        game_data_collection.append(gameData)
+        print_styles.printPowerballWinner(gameData)
+        print(f"**********************************************************************************************************************************************************")
+    
+    mappers.mapLinePlot(x, y, f"Powerball {sims} Simulations", "Game Number #", "Payout $")
+    printSimulationReport(sims, total_payout)
+    return game_data_collection
+
+def playSinglePowerball():
+    userNums = []
+    non_pb_checker = {}
+    getUserInputs(userNums, non_pb_checker) # get user nums
+    winNums = generateWinningNums() # generate winning nums
+    gameData = determinePayout(userNums, non_pb_checker, winNums)
+    print_styles.printPowerballWinner(gameData)
+    print_styles.printCloser("POWERBALL")
+    return gameData
 
 def getUserInputs(userNums, non_pb_checker):
     # get non-powerball nums

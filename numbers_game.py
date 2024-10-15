@@ -9,43 +9,34 @@ def numbers_game():
     print_styles.printBoxHeader("Numbers Game", rules.numbersRules)
     shouldSimulate = simulations.simulateGames(errorPrinter)
     if (shouldSimulate):
-        sims = simulations.getSimulationCount(errorPrinter)
-        spots = 4
-        userNums = getUserInputs(spots) # get user nums
-        userBets = getUserBets() # {0: False, ...}
-        total_payout = 0
-        game_data_collection = []
-        for i in range(sims):
-            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
-            # winNums = [1, 2, 3, 4] # generate winning nums
-            winNums = generateWinningNums() # generate winning nums
-            payout_matcher = {}
-            payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
-            payout = payout_matcher.get("payout")
-            total_payout += payout
-            matcher = payout_matcher.get("matcher")
-            gameData = {
-                "userBets": userBets,
-                "userNums": userNums,
-                "winNums": winNums,
-                "payout": payout,
-                "matcher": matcher,
-            }
-            game_data_collection.append(gameData)
-            print_styles.printNumberGameWinner(gameData)
-            print(f"**********************************************************************************************************************************************************")
-        printSimulationReport(sims, total_payout, userBets)
-        print_styles.printCloser("NUMBERS GAME")
+        game_data_collection = simulateNumbersGame()
         return game_data_collection
     else:
-        spots = 4
-        userNums = getUserInputs(spots) # get user nums
-        userBets = getUserBets() # {0: False, ...}
+        gameData = playSingleNumbersGame()
+        return gameData
+
+    # return object with all important data
+
+def simulateNumbersGame():
+    sims = simulations.getSimulationCount(errorPrinter)
+    spots = 4
+    userNums = getUserInputs(spots) # get user nums
+    userBets = getUserBets() # {0: False, ...}
+    total_payout = 0
+    game_data_collection = []
+    x = []
+    y = []
+    for i in range(sims):
+        print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+        # winNums = [1, 2, 3, 4] # generate winning nums
         winNums = generateWinningNums() # generate winning nums
         payout_matcher = {}
         payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
         payout = payout_matcher.get("payout")
+        total_payout += payout
         matcher = payout_matcher.get("matcher")
+        x.append(i)
+        y.append(payout)
         gameData = {
             "userBets": userBets,
             "userNums": userNums,
@@ -53,11 +44,33 @@ def numbers_game():
             "payout": payout,
             "matcher": matcher,
         }
+        game_data_collection.append(gameData)
         print_styles.printNumberGameWinner(gameData)
-        print_styles.printCloser("NUMBER GAME")
-        return gameData
+        print(f"**********************************************************************************************************************************************************")
+    mappers.mapLinePlot(x, y, f"Numbers Game {sims} Simulations", "Game Number #", "Payout $")
+    printSimulationReport(sims, total_payout, userBets)
+    print_styles.printCloser("NUMBERS GAME")
+    return game_data_collection
 
-    # return object with all important data
+def playSingleNumbersGame():
+    spots = 4
+    userNums = getUserInputs(spots) # get user nums
+    userBets = getUserBets() # {0: False, ...}
+    winNums = generateWinningNums() # generate winning nums
+    payout_matcher = {}
+    payout_matcher = determinePayout(spots, userBets, userNums, winNums) 
+    payout = payout_matcher.get("payout")
+    matcher = payout_matcher.get("matcher")
+    gameData = {
+        "userBets": userBets,
+        "userNums": userNums,
+        "winNums": winNums,
+        "payout": payout,
+        "matcher": matcher,
+    }
+    print_styles.printNumberGameWinner(gameData)
+    print_styles.printCloser("NUMBER GAME")
+    return gameData
 
 def simulateGames():
     q = input("Would you like to simulate your games played (y/n): ")

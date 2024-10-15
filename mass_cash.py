@@ -9,32 +9,46 @@ def mass_cash():
     print_styles.printBoxHeader("Mass Cash", rules.massCashRules)
     shouldSimulate = simulations.simulateGames(errorPrinter)
     if (shouldSimulate):
-        sims = simulations.getSimulationCount(errorPrinter)
-        spots = 5
-        userNums = getUserInputs(spots) # get user nums
-        total_matches = 0
-        total_payout = 0
-        game_data_collection = []
-        for i in range(sims):
-            print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
-            winNums = generateWinningNums() # generate winning nums
-            gameData = determinePayout(spots, userNums, winNums)
-            payout = gameData.get("payout")
-            matches = gameData.get("matches")
-            total_payout += payout
-            total_matches += matches
-            game_data_collection.append(gameData)
-            print_styles.printMassCashWinner(gameData)
-            print(f"**********************************************************************************************************************************************************")
-        printSimulationReport(sims, total_matches, total_payout)
+        game_data_collection = simulateMassCash()
         return game_data_collection
     else:
-        spots = 5
-        userNums = getUserInputs(spots) # get user nums
-        winNums = generateWinningNums() # generate winning nums
-        gameData = determinePayout(spots, userNums, winNums)
+        gameData = playSingleMassCashGame()
         return gameData
     
+
+def simulateMassCash():
+    sims = simulations.getSimulationCount(errorPrinter)
+    spots = 5
+    userNums = getUserInputs(spots) # get user nums
+    total_matches = 0
+    total_payout = 0
+    game_data_collection = []
+    x = []
+    y = []
+    for i in range(sims):
+        print(f"****************************************************************** SIMULATION-[{i + 1}] ******************************************************************")
+        winNums = generateWinningNums() # generate winning nums
+        gameData = determinePayout(spots, userNums, winNums)
+        payout = gameData.get("payout")
+        matches = gameData.get("matches")
+        x.append(i)
+        y.append(payout)
+        total_payout += payout
+        total_matches += matches
+        game_data_collection.append(gameData)
+        print_styles.printMassCashWinner(gameData)
+        print(f"**********************************************************************************************************************************************************")
+    mappers.mapLinePlot(x, y, f"Mass Cash {sims} Simulations", "Game Number #", "Payout $")
+    printSimulationReport(sims, total_matches, total_payout)
+    print_styles.printCloser("MASS CASH")
+    return game_data_collection
+
+def playSingleMassCashGame():
+    spots = 5
+    userNums = getUserInputs(spots) # get user nums
+    winNums = generateWinningNums() # generate winning nums
+    gameData = determinePayout(spots, userNums, winNums)
+    return gameData
 
 def getUserInputs(spots):
     nums = {}
