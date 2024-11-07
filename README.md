@@ -32,7 +32,7 @@ Lottery Games Simulator is an application that does three things.
 ## Image
 Here is an example of the project structure showing how the csv files are stored in the data folder. Accordingly, the terminal prompting and example game result are shown as well.
 
-![Screenshot of project directory and terminal](images\project_structure.png)
+![Screenshot of project directory and terminal](images/project_structure.png)
 
 
 
